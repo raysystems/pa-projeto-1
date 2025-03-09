@@ -1,3 +1,5 @@
+
+### Java ###
 # Compiled class file
 *.class
 
@@ -22,3 +24,14 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# End of https://www.toptal.com/developers/gitignore/api/java
+
+# Custom rules
+.idea
+# Ignore all the files and directories in the server directory except server.config.example
+html/*
+!html/server.config.example
+!html/favicon.ico
+!html/404.html
+
