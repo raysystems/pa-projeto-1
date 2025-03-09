@@ -35,3 +35,7 @@ html/*
 !html/favicon.ico
 !html/404.html
 
+target/maven-status/maven-compiler-plugin/testCompile/default-cli/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-cli/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-cli/inputFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-cli/createdFiles.lst
