@@ -1,0 +1,8 @@
+{
+  "port": 8888,
+  "documentRoot": "/var/www/html",
+  "defaultPage": "index.html",
+  "defaultPageExtension": ".html",
+  "page404": "404.html",
+  "maximumRequests": 100
+}
