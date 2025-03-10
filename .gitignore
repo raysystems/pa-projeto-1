@@ -35,3 +35,4 @@ html/*
 !html/favicon.ico
 !html/404.html
 
+target/
