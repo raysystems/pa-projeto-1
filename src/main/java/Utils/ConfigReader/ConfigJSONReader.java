@@ -38,9 +38,7 @@ public class ConfigJSONReader implements IConfigReader {
             System.err.println("Error reading server configuration file: " + cfgPath);
             e.printStackTrace();
         }
-        //Print Config
-        System.out.println("Loaded Config MAP:");
-        System.out.println("Port: " + configMap.get("port"));
+
         return configMap;
     }
 }
