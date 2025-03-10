@@ -2,6 +2,6 @@
  Projeto 1
 
 Grupo 7:
-Marco Ferreira - 2119022
-Sérgio Olim -2120322
-Jorge Jesus - 2120022
+Marco Ferreira - 2119022 <br>
+Sérgio Olim -2120322 <br>
+Jorge Jesus - 2120022 <br>
