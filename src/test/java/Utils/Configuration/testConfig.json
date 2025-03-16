@@ -1,0 +1,8 @@
+{
+    "port": 8888,
+    "documentRoot": "www",
+    "defaultPage": "index",
+    "defaultPageExtension": "html",
+    "page404": "404",
+    "maximumRequests": 100
+}
