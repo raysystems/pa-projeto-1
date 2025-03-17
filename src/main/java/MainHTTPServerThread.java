@@ -1,3 +1,5 @@
+import Utils.Configuration.ServerConfig;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +12,8 @@ import java.nio.file.Paths;
  */
 public class MainHTTPServerThread extends Thread {
 
-    private static final String SERVER_ROOT = ""; // Define by user
+    private String SERVER_ROOT; // Define by user
+    private ServerConfig serverConfig;
     private final int port;
     private ServerSocket server;
 
@@ -19,8 +22,11 @@ public class MainHTTPServerThread extends Thread {
      *
      * @param port The port number on which the server will listen.
      */
-    public MainHTTPServerThread(int port) {
-        this.port = port;
+    public MainHTTPServerThread(ServerConfig cfg) {
+        this.serverConfig = cfg;
+        this.port = cfg.getPort();
+        this.SERVER_ROOT = cfg.getDocumentRoot();
+
     }
 
     /**
@@ -29,14 +35,10 @@ public class MainHTTPServerThread extends Thread {
      * @param path The file path to read.
      * @return A byte array containing the file's contents, or an empty array if an error occurs.
      */
-    private byte[] readBinaryFile(String path) {
-        try {
-            return Files.readAllBytes(Paths.get(path));
-        } catch (IOException e) {
-            System.err.println("Error reading file: " + path);
-            e.printStackTrace();
-            return new byte[0];
-        }
+    private byte[] readBinaryFile(String path) throws IOException {
+
+        return Files.readAllBytes(Paths.get(path));
+
     }
 
     /**
@@ -93,8 +95,24 @@ public class MainHTTPServerThread extends Thread {
                     String route = tokens[1];
                     System.out.println("Request received: " + request);
 
-                    // Serve the requested file
-                    byte[] content = readBinaryFile(SERVER_ROOT + route);
+                    // if the route does not contain .html, append the default page
+                    if (!route.contains(".html")) {
+                        route += '/' + serverConfig.getDefaultPage();
+                    }
+
+                    System.out.println("Route: " + route);
+                    byte[] content;
+                    try {
+                        System.out.println("Path : " + SERVER_ROOT + route);
+                        content = readBinaryFile(SERVER_ROOT + route);
+
+                    } catch (IOException e) {
+                        System.out.println("Path : " + SERVER_ROOT + serverConfig.getPage404());
+                        content = readBinaryFile(SERVER_ROOT + '/' + serverConfig.getPage404());
+                    }
+
+
+                    System.out.println("Path : " + SERVER_ROOT + route);
 
                     // Send HTTP response headers
                     clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
