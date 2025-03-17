@@ -29,7 +29,7 @@ public class Main {
         System.out.println("Maximum Requests: " + serverConfig.getMaximumRequests());
 
 
-        MainHTTPServerThread s = new MainHTTPServerThread(8888);
+        MainHTTPServerThread s = new MainHTTPServerThread(serverConfig);
         s.start();
         try {
             s.join();
