@@ -36,3 +36,5 @@ html/*
 !html/404.html
 
 target/
+config/serverConfig.json
+config/
