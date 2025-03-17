@@ -20,7 +20,7 @@ public class MainHTTPServerThread extends Thread {
     /**
      * Constructor to initialize the HTTP server thread with a specified port.
      *
-     * @param port The port number on which the server will listen.
+     * @param cfg The port number on which the server will listen.
      */
     public MainHTTPServerThread(ServerConfig cfg) {
         this.serverConfig = cfg;
@@ -73,64 +73,85 @@ public class MainHTTPServerThread extends Thread {
             System.out.println("Working Directory: " + System.getProperty("user.dir"));
 
             while (true) {
-                try (Socket client = server.accept();
-                     BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                     OutputStream clientOutput = client.getOutputStream()) {
+                Socket client = server.accept();
+                System.out.println("Client connected: " + client.getInetAddress().getHostAddress());
+                //AQUI E ONDE SERA FEITO TUDO RELACIONADO COM O PARALELISMO
 
-                    System.out.println("New client connected: " + client);
-
-                    // Read and parse the HTTP request
-                    StringBuilder requestBuilder = new StringBuilder();
-                    String line;
-                    while (!(line = br.readLine()).isBlank()) {
-                        requestBuilder.append(line).append("\r\n");
-                    }
-
-                    String request = requestBuilder.toString();
-                    String[] tokens = request.split(" ");
-                    if (tokens.length < 2) {
-                        System.err.println("Invalid request received.");
-                        continue;
-                    }
-                    String route = tokens[1];
-                    System.out.println("Request received: " + request);
-
-                    // if the route does not contain .html, append the default page
-                    if (!route.contains(".html")) {
-                        route += '/' + serverConfig.getDefaultPage();
-                    }
-
-                    System.out.println("Route: " + route);
-                    byte[] content;
-                    try {
-                        System.out.println("Path : " + SERVER_ROOT + route);
-                        content = readBinaryFile(SERVER_ROOT + route);
-
-                    } catch (IOException e) {
-                        System.out.println("Path : " + SERVER_ROOT + serverConfig.getPage404());
-                        content = readBinaryFile(SERVER_ROOT + '/' + serverConfig.getPage404());
-                    }
-
-
-                    System.out.println("Path : " + SERVER_ROOT + route);
-
-                    // Send HTTP response headers
-                    clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
-                    clientOutput.write("Content-Type: text/html\r\n".getBytes());
-                    clientOutput.write("\r\n".getBytes());
-
-                    // Send response body
-                    clientOutput.write(content);
-                    clientOutput.write("\r\n\r\n".getBytes());
-                    clientOutput.flush();
-                } catch (IOException e) {
-                    System.err.println("Error handling client request.");
-                    e.printStackTrace();
-                }
+                handleClienteRequest(client);
             }
+
         } catch (IOException e) {
             System.err.println("Server error: Unable to start on port " + port);
             e.printStackTrace();
         }
+    }
+
+    private void handleClienteRequest(Socket client) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+             OutputStream clientOutput = client.getOutputStream()) {
+
+            System.out.println("New client connected: " + client);
+
+            // Read and parse the HTTP request, returns the route
+            String route = parseHTTPRequest(br);
+
+
+            byte[] content = serveDefaultPage(route);
+
+            // Send HTTP response headers
+            clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
+            clientOutput.write("Content-Type: text/html\r\n".getBytes());
+            clientOutput.write("\r\n".getBytes());
+
+            // Send response body
+            clientOutput.write(content);
+            clientOutput.write("\r\n\r\n".getBytes());
+            clientOutput.flush();
+
+        } catch (IOException e) {
+            System.err.println("Error handling client request.");
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] serveDefaultPage(String route) throws IOException {
+        // if the route does not contain .html, append the default page
+        if (!route.contains(".html")) {
+            route += '/' + serverConfig.getDefaultPage();
+        }
+
+        System.out.println("Route: " + route);
+
+
+        byte[] content;
+        try {
+            System.out.println("Path : " + SERVER_ROOT + route);
+            content = readBinaryFile(SERVER_ROOT + route);
+
+        } catch (IOException e) {
+            System.out.println("Path : " + SERVER_ROOT + serverConfig.getPage404());
+            content = readBinaryFile(SERVER_ROOT + '/' + serverConfig.getPage404());
+        }
+        return  content;
+    }
+
+    private String parseHTTPRequest(BufferedReader br) throws IOException {
+        StringBuilder requestBuilder = new StringBuilder();
+
+        String line;
+        while (!(line = br.readLine()).isBlank()) {
+            requestBuilder.append(line).append("\r\n");
+        }
+
+        String request = requestBuilder.toString();
+        String[] tokens = request.split(" ");
+        if (tokens.length < 2) {
+            System.err.println("Invalid request received.");
+            return null;
+        }
+
+        String route = tokens[1];
+        System.out.println("Request received: " + request);
+        return route;
     }
 }
