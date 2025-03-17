@@ -18,9 +18,9 @@ public class MainHTTPServerThread extends Thread {
     private ServerSocket server;
 
     /**
-     * Constructor to initialize the HTTP server thread with a specified port.
+     * Constructor to initialize the HTTP server thread with the specified configuration.
      *
-     * @param cfg The port number on which the server will listen.
+     * @param cfg An instance of ServerConfig containing all attributes read from the configuration file.
      */
     public MainHTTPServerThread(ServerConfig cfg) {
         this.serverConfig = cfg;
@@ -86,6 +86,13 @@ public class MainHTTPServerThread extends Thread {
         }
     }
 
+    /**
+     * Handles the client request by reading the HTTP request, serving the appropriate file,
+     * and sending the HTTP response.
+     *
+     * @param client The client socket.
+     * @throws IOException If an I/O error occurs while handling the client request.
+     */
     private void handleClienteRequest(Socket client) throws IOException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
              OutputStream clientOutput = client.getOutputStream()) {
@@ -114,6 +121,13 @@ public class MainHTTPServerThread extends Thread {
         }
     }
 
+    /**
+     * Serves the default page or a 404 error page if the requested route does not exist.
+     *
+     * @param route The requested route.
+     * @return A byte array containing the contents of the requested file or the 404 error page.
+     * @throws IOException If an I/O error occurs while reading the file.
+     */
     private byte[] serveDefaultPage(String route) throws IOException {
         // if the route does not contain .html, append the default page
         if (!route.contains(".html")) {
@@ -135,6 +149,13 @@ public class MainHTTPServerThread extends Thread {
         return  content;
     }
 
+    /**
+     * Parses the HTTP request from the client and returns the requested route.
+     *
+     * @param br The BufferedReader to read the HTTP request.
+     * @return The requested route, or null if the request is invalid.
+     * @throws IOException If an I/O error occurs while reading the request.
+     */
     private String parseHTTPRequest(BufferedReader br) throws IOException {
         StringBuilder requestBuilder = new StringBuilder();
 
