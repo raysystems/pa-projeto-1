@@ -1,3 +1,4 @@
+import Logging.Logger;
 import Utils.Configuration.ServerConfig;
 
 import java.io.*;
@@ -101,9 +102,16 @@ public class MainHTTPServerThread extends Thread {
 
             // Read and parse the HTTP request, returns the route
             String route = parseHTTPRequest(br);
-
+            String method = "GET"; // This server only supports GET requests
+            String origin = client.getInetAddress().getHostAddress();
+            int statusCode = 200;
 
             byte[] content = serveDefaultPage(route);
+
+            // Check if the page was not found (serveDefaultPage deals with this)
+            if (new String(content).contains("404")) {
+                statusCode = 404;
+            }
 
             // Send HTTP response headers
             clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
@@ -114,6 +122,9 @@ public class MainHTTPServerThread extends Thread {
             clientOutput.write(content);
             clientOutput.write("\r\n\r\n".getBytes());
             clientOutput.flush();
+
+            // Register the request in the server log
+            Logger.logRequest(method, route, origin, statusCode);
 
         } catch (IOException e) {
             System.err.println("Error handling client request.");
