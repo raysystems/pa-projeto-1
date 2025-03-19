@@ -78,7 +78,7 @@ public class MainHTTPServerThread extends Thread {
                 System.out.println("Client connected: " + client.getInetAddress().getHostAddress());
                 //AQUI E ONDE SERA FEITO TUDO RELACIONADO COM O PARALELISMO
 
-                handleClienteRequest(client);
+                handleClientRequest(client);
             }
 
         } catch (IOException e) {
@@ -94,7 +94,7 @@ public class MainHTTPServerThread extends Thread {
      * @param client The client socket.
      * @throws IOException If an I/O error occurs while handling the client request.
      */
-    private void handleClienteRequest(Socket client) throws IOException {
+    private void handleClientRequest(Socket client) throws IOException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
              OutputStream clientOutput = client.getOutputStream()) {
 
@@ -106,9 +106,9 @@ public class MainHTTPServerThread extends Thread {
             String origin = client.getInetAddress().getHostAddress();
             int statusCode = 200;
 
-            byte[] content = serveDefaultPage(route);
+            byte[] content = serverDefaultPage(route);
 
-            // Check if the page was not found (serveDefaultPage deals with this)
+            // Check if the page was not found (serverDefaultPage deals with this)
             if (new String(content).contains("404")) {
                 statusCode = 404;
             }
@@ -139,7 +139,7 @@ public class MainHTTPServerThread extends Thread {
      * @return A byte array containing the contents of the requested file or the 404 error page.
      * @throws IOException If an I/O error occurs while reading the file.
      */
-    private byte[] serveDefaultPage(String route) throws IOException {
+    private byte[] serverDefaultPage(String route) throws IOException {
         // if the route does not contain .html, append the default page
         if (!route.contains(".html")) {
             route += '/' + serverConfig.getDefaultPage();
