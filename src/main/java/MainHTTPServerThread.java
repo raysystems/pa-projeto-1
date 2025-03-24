@@ -1,3 +1,4 @@
+import HTMLSynchronization.HTMLSyncAccess;
 import Logging.Logger;
 import Utils.Configuration.ServerConfig;
 
@@ -18,6 +19,7 @@ public class MainHTTPServerThread extends Thread {
     private final int port;
     private ServerSocket server;
     private ThreadPoolRunner runner;
+    private HTMLSyncAccess htmlSyncAccess;
 
     /**
      * Constructor to initialize the HTTP server thread with the specified configuration.
@@ -29,7 +31,7 @@ public class MainHTTPServerThread extends Thread {
         this.port = cfg.getPort();
         this.SERVER_ROOT = cfg.getDocumentRoot();
         this.runner = new ThreadPoolRunner(5);
-
+        this.htmlSyncAccess = new HTMLSyncAccess("html");
 
     }
 
@@ -65,7 +67,7 @@ public class MainHTTPServerThread extends Thread {
                 //System.out.println("Client connected: " + client.getInetAddress().getHostAddress());
 
 
-                RequestHandlerThread task = new RequestHandlerThread(client, SERVER_ROOT, serverConfig);
+                RequestHandlerThread task = new RequestHandlerThread(client, SERVER_ROOT, serverConfig, htmlSyncAccess);
                 runner.submit(task);
 
 

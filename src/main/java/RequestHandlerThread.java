@@ -1,3 +1,4 @@
+import HTMLSynchronization.HTMLSyncAccess;
 import Logging.Logger;
 import Utils.Configuration.ServerConfig;
 
@@ -13,12 +14,14 @@ public class RequestHandlerThread extends Thread {
     private Socket client;
     private String SERVER_ROOT;
     private ServerConfig serverConfig;
+    private HTMLSyncAccess htmlSyncAccess;
 
-    public RequestHandlerThread(Socket client, String SERVER_ROOT, ServerConfig serverConfig) {
+    public RequestHandlerThread(Socket client, String SERVER_ROOT, ServerConfig serverConfig, HTMLSyncAccess htmlSyncAccess) {
 
         this.SERVER_ROOT = SERVER_ROOT;
         this.serverConfig = serverConfig;
         this.client = client;
+        this.htmlSyncAccess = htmlSyncAccess;
     }
 
     @Override
@@ -80,11 +83,15 @@ public class RequestHandlerThread extends Thread {
         if (!route.contains(".html") && !route.contains(".css") && !route.contains(".js") && !route.contains(".ico") &&
                 !route.contains(".png") && !route.contains(".jpg") && !route.contains(".jpeg") && !route.contains(".gif") &&
                 !route.contains(".svg") && !route.contains(".pdf") && !route.contains(".txt") && !route.contains(".xml")) {
-            route += '/' + serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
+            route += serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
         }
 
         //System.out.println("Route: " + route);
-
+        if (route.contains(".html")) {
+            htmlSyncAccess.LockFile(SERVER_ROOT + route);
+        }
+        htmlSyncAccess.getSyncLockMap().forEach((k, v) -> System.out.println("Key: " + k + " Value: " + v));
+        System.out.println("Route: " + SERVER_ROOT + route);
 
 
         byte[] content;
@@ -95,6 +102,9 @@ public class RequestHandlerThread extends Thread {
         } catch (IOException e) {
 
             content = readBinaryFile(SERVER_ROOT + '/' + serverConfig.getPage404());
+        }
+        if (route.contains(".html")) {
+            htmlSyncAccess.UnlockFile(SERVER_ROOT + route);
         }
         return  content;
     }
