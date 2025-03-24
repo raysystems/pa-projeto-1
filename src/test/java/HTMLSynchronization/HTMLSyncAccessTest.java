@@ -12,10 +12,12 @@ class HTMLSyncAccessTest {
 
         assertNotNull(htmlSyncAccess.getSyncLockMap());
 
+        htmlSyncAccess.getSyncLockMap().forEach((k, v) -> System.out.println("Key: " + k + " Value: " + v));
+
         assertAll(
                 () -> assertEquals(2, htmlSyncAccess.getSyncLockMap().size()),
-                () -> assertTrue(htmlSyncAccess.getSyncLockMap().containsKey("index3")),
-                () -> assertTrue(htmlSyncAccess.getSyncLockMap().containsKey("index"))
+                () -> assertTrue(htmlSyncAccess.getSyncLockMap().containsKey("src/test/java/HTMLSynchronization/testshtml/test2/index3.html")),
+                () -> assertTrue(htmlSyncAccess.getSyncLockMap().containsKey("src/test/java/HTMLSynchronization/testshtml/index.html"))
         );
     }
 

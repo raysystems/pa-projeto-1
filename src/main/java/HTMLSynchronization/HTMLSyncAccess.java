@@ -28,17 +28,17 @@ public class HTMLSyncAccess {
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".html"))
                     .forEach(path -> {
-                        String fileName = path.getFileName().toString();
-                        String key = fileName.substring(0, fileName.lastIndexOf('.'));
-                        AddValuesToMap(key, new ReentrantLock(true));
+                        String filePath = path.toString();
+                        filePath = filePath.replace("\\", "/");
+                        AddValuesToMap(filePath, new ReentrantLock(true));
                     });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void LockFile(String fileName) {
-        ReentrantLock lockFile = SyncLockMap.get(fileName);
+    public void LockFile(String filePath) {
+        ReentrantLock lockFile = SyncLockMap.get(filePath);
         if (lockFile != null) {
             try {
                 lockFile.lock();
@@ -46,12 +46,12 @@ public class HTMLSyncAccess {
                 e.printStackTrace();
             }
         } else {
-            throw new IllegalArgumentException("No lock for: " + fileName);
+            throw new IllegalArgumentException("No lock for this path: " + filePath);
         }
     }
 
-    public void UnlockFile(String fileName) {
-        ReentrantLock lockFile = SyncLockMap.get(fileName);
+    public void UnlockFile(String filePath) {
+        ReentrantLock lockFile = SyncLockMap.get(filePath);
         if (lockFile != null) {
             try {
                 lockFile.unlock();
@@ -59,7 +59,7 @@ public class HTMLSyncAccess {
                 e.printStackTrace();
             }
         } else {
-            throw new IllegalArgumentException("No lock for: " + fileName);
+            throw new IllegalArgumentException("No lock for this path: " + filePath);
         }
     }
 
@@ -67,14 +67,4 @@ public class HTMLSyncAccess {
         return SyncLockMap;
     }
 
-    //Jorge Desenvolve um metodo lock que permita dar lock a uma tranca pelo file name
-    // exemplo
-    // HTMLSyncAccess mapa = new HTMLSyncAccess();
-    // mapa.lock(index) para o ficheiro index.html
-
-
-    // O mesmo para o unlock jorge
-
-
-    //Jorge Produz todos os testes unitarios desta classe
 }
