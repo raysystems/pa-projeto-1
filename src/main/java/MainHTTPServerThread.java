@@ -1,4 +1,4 @@
-import Logging.Logger;
+import Logging.LogProducer;
 import Utils.Configuration.ServerConfig;
 
 import java.io.*;
@@ -125,7 +125,7 @@ public class MainHTTPServerThread extends Thread {
             clientOutput.flush();
 
             // Register the request in the server log
-            Logger.logRequest(method, route, origin, statusCode);
+            LogProducer.logRequest(method, route, origin, statusCode);
 
         } catch (IOException e) {
             System.err.println("Error handling client request.");
