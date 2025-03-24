@@ -116,6 +116,7 @@ public class MainHTTPServerThread extends Thread {
             // Send HTTP response headers
             clientOutput.write("HTTP/1.1 200 OK\r\n".getBytes());
             clientOutput.write("Content-Type: text/html\r\n".getBytes());
+            clientOutput.write("Access-Control-Allow-Origin: *\r\n".getBytes()); // Add CORS header
             clientOutput.write("\r\n".getBytes());
 
             // Send response body
@@ -142,7 +143,7 @@ public class MainHTTPServerThread extends Thread {
     private byte[] serverDefaultPage(String route) throws IOException {
         // if the route does not contain .html, append the default page
         if (!route.contains(".html")) {
-            route += '/' + serverConfig.getDefaultPage();
+            route += '/' + serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
         }
 
         System.out.println("Route: " + route);
