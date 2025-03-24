@@ -63,6 +63,10 @@ public class HTMLSyncAccess {
         }
     }
 
+    public Map<String, ReentrantLock> getSyncLockMap() {
+        return SyncLockMap;
+    }
+
     //Jorge Desenvolve um metodo lock que permita dar lock a uma tranca pelo file name
     // exemplo
     // HTMLSyncAccess mapa = new HTMLSyncAccess();
