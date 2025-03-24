@@ -1,8 +1,8 @@
 {
   "port": 8080,
-  "root": "/var/www",
-  "documentRoot": "C:/Users/mdram/Documents/GitHub/pa-projeto-1/html",
-  "defaultPage": "index.html",
+  "root": "localhost",
+  "documentRoot": "html",
+  "defaultPage": "index",
   "defaultPageExtension": ".html",
   "page404": "404.html",
   "maximumRequests": 100
