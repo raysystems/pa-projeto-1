@@ -27,6 +27,7 @@ public class Main {
         System.out.println("Default Page Extension: " + serverConfig.getDefaultPageExtension());
         System.out.println("Page 404: " + serverConfig.getPage404());
         System.out.println("Maximum Requests: " + serverConfig.getMaximumRequests());
+        System.out.println("---------------------------");
 
 
         MainHTTPServerThread s = new MainHTTPServerThread(serverConfig);
