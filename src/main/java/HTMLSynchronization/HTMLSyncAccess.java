@@ -37,6 +37,36 @@ public class HTMLSyncAccess {
         }
     }
 
+    public void LockFile(String fileName) {
+        ReentrantLock lockFile = SyncLockMap.get(fileName);
+        if (lockFile != null) {
+            try {
+                lockFile.lock();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("No lock for: " + fileName);
+        }
+    }
+
+    public void UnlockFile(String fileName) {
+        ReentrantLock lockFile = SyncLockMap.get(fileName);
+        if (lockFile != null) {
+            try {
+                lockFile.unlock();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("No lock for: " + fileName);
+        }
+    }
+
+    public Map<String, ReentrantLock> getSyncLockMap() {
+        return SyncLockMap;
+    }
+
     //Jorge Desenvolve um metodo lock que permita dar lock a uma tranca pelo file name
     // exemplo
     // HTMLSyncAccess mapa = new HTMLSyncAccess();
