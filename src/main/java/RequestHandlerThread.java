@@ -1,3 +1,4 @@
+import HTMLSynchronization.HTMLSyncAccess;
 import Logging.Logger;
 import Utils.Configuration.ServerConfig;
 
@@ -13,12 +14,14 @@ public class RequestHandlerThread extends Thread {
     private Socket client;
     private String SERVER_ROOT;
     private ServerConfig serverConfig;
+    private HTMLSyncAccess htmlSyncAccess;
 
-    public RequestHandlerThread(Socket client, String SERVER_ROOT, ServerConfig serverConfig) {
+    public RequestHandlerThread(Socket client, String SERVER_ROOT, ServerConfig serverConfig, HTMLSyncAccess htmlSyncAccess) {
 
         this.SERVER_ROOT = SERVER_ROOT;
         this.serverConfig = serverConfig;
         this.client = client;
+        this.htmlSyncAccess = htmlSyncAccess;
     }
 
     @Override
@@ -34,8 +37,29 @@ public class RequestHandlerThread extends Thread {
             String origin = client.getInetAddress().getHostAddress();
             int statusCode = 200;
 
-            byte[] content = serverDefaultPage(route, serverConfig, SERVER_ROOT);
 
+            route = parseRouteIdentifyNeedsDefaultPage(route);
+
+
+            //Os unicos docs que existe necessidade de sincronizacao sao os html logo tudo o resto passa
+
+            if (route.contains(".html")) {
+                String Key = SERVER_ROOT + route;
+                System.out.println("Sou um HTML VOU FAZER LOCK : " + Key);
+                htmlSyncAccess.LockFile(Key);
+            }
+
+            htmlSyncAccess.getSyncLockMap().forEach((k, v) -> System.out.println("Key: " + k + " Value: " + v));
+
+            //SECCAO CRITICA
+            byte[] content = readDocument(route, serverConfig, SERVER_ROOT);
+            //FIM DA SECCAO CRITICA
+
+            if (route.contains(".html")) {
+                String Key = SERVER_ROOT + route;
+                System.out.println("Sou um HTML VOU FAZER UNLOCK : " + Key);
+                htmlSyncAccess.UnlockFile(Key);
+            }
             // Check if the page was not found (serverDefaultPage deals with this)
             if (new String(content).contains("404")) {
                 statusCode = 404;
@@ -68,6 +92,30 @@ public class RequestHandlerThread extends Thread {
         }
     }
 
+    private String parseRouteIdentifyNeedsDefaultPage(String route) {
+        // if the route does not contain .html, append the default page
+        if (!route.contains(".html") && !route.contains(".css") && !route.contains(".js") && !route.contains(".ico") &&
+                !route.contains(".png") && !route.contains(".jpg") && !route.contains(".jpeg") && !route.contains(".gif") &&
+                !route.contains(".svg") && !route.contains(".pdf") && !route.contains(".txt") && !route.contains(".xml")) {
+            System.out.println("Rota: " + route);
+            if (route.equals("/")) {
+                route += serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
+            } else {
+                route += '/' + serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
+            }
+
+
+        }
+
+        //check if files exists
+
+        if (!Files.exists(Paths.get(SERVER_ROOT + route))) {
+            route =  '/' + serverConfig.getPage404();
+
+        }
+
+        return route;
+    }
     /**
      * Serves the default page or a 404 error page if the requested route does not exist.
      *
@@ -75,17 +123,7 @@ public class RequestHandlerThread extends Thread {
      * @return A byte array containing the contents of the requested file or the 404 error page.
      * @throws IOException If an I/O error occurs while reading the file.
      */
-    private byte[] serverDefaultPage(String route, ServerConfig serverConfig, String SERVER_ROOT) throws IOException {
-        // if the route does not contain .html, append the default page
-        if (!route.contains(".html") && !route.contains(".css") && !route.contains(".js") && !route.contains(".ico") &&
-                !route.contains(".png") && !route.contains(".jpg") && !route.contains(".jpeg") && !route.contains(".gif") &&
-                !route.contains(".svg") && !route.contains(".pdf") && !route.contains(".txt") && !route.contains(".xml")) {
-            route += '/' + serverConfig.getDefaultPage() + serverConfig.getDefaultPageExtension();
-        }
-
-        //System.out.println("Route: " + route);
-
-
+    private byte[] readDocument(String route, ServerConfig serverConfig, String SERVER_ROOT) throws IOException {
 
         byte[] content;
         try {
@@ -93,9 +131,9 @@ public class RequestHandlerThread extends Thread {
             content = readBinaryFile(SERVER_ROOT + route);
 
         } catch (IOException e) {
-
-            content = readBinaryFile(SERVER_ROOT + '/' + serverConfig.getPage404());
+            throw new IOException(e.getMessage());
         }
+
         return  content;
     }
 
