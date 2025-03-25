@@ -1,5 +1,4 @@
 import HTMLSynchronization.HTMLSyncAccess;
-import Logging.Logger;
 import Utils.Configuration.ServerConfig;
 
 import java.io.*;
@@ -36,10 +35,6 @@ public class MainHTTPServerThread extends Thread {
     }
 
 
-
-
-
-
     /**
      * Starts the HTTP server and listens for incoming client requests.
      * Processes HTTP GET requests and serves files from the defined server root directory.
@@ -66,10 +61,8 @@ public class MainHTTPServerThread extends Thread {
                 Socket client = server.accept();
                 //System.out.println("Client connected: " + client.getInetAddress().getHostAddress());
 
-
                 RequestHandlerThread task = new RequestHandlerThread(client, SERVER_ROOT, serverConfig, htmlSyncAccess);
                 runner.submit(task);
-
 
             }
 
