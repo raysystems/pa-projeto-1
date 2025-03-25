@@ -3,7 +3,7 @@
   "root": "localhost",
   "documentRoot": "html",
   "defaultPage": "index",
-  "defaultPageExtension": "html",
+  "defaultPageExtension": ".html",
   "page404": "404.html",
   "maximumRequests": 5
 }
