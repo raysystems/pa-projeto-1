@@ -35,6 +35,75 @@ class HTMLSyncAccessTest {
         assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/test2/index3.html").isLocked());
     }
 
-    
+    @Test
+    void testSimultaneousAccessToSameFile() throws InterruptedException {
+        // Simulate 2 users
+        Thread user1 = new Thread(() -> {
+            try {
+                htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+                assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+                Thread.sleep(3500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                htmlSyncAccess.UnlockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+            }
+        });
+
+        Thread user2 = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+                Thread.sleep(3600);
+                htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+                assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                htmlSyncAccess.UnlockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+            }
+        });
+
+        user1.start();
+        user2.start();
+
+        user1.join();
+        user2.join();
+
+        assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+
+    }
+
+    @Test
+    void testSimultaneousAccessToDifferentFiles() throws InterruptedException {
+        Thread user1 = new Thread(() -> {
+            htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+            assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+            htmlSyncAccess.UnlockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+        });
+
+        Thread user2 = new Thread(() -> {
+            htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/test2/index3.html");
+            assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/test2/index3.html").isLocked());
+            htmlSyncAccess.UnlockFile("src/test/java/HTMLSynchronization/testshtml/test2/index3.html");
+        });
+
+        user1.start();
+        user2.start();
+
+        user1.join();
+        user2.join();
+
+        assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+        assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/test2/index3.html").isLocked());
+    }
+
+
+    @Test
+    void testLockUnlockNonExistentFile() {
+        String fakeFile = "src/test/java/HTMLSynchronization/testshtml/fake.html";
+        assertThrows(IllegalArgumentException.class, () -> htmlSyncAccess.LockFile(fakeFile));
+        assertThrows(IllegalArgumentException.class, () -> htmlSyncAccess.UnlockFile(fakeFile));
+    }
 
 }
