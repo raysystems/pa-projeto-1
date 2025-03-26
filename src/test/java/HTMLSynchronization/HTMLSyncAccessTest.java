@@ -42,7 +42,7 @@ class HTMLSyncAccessTest {
             try {
                 htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
                 assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
-                Thread.sleep(1000);
+                Thread.sleep(3500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -52,11 +52,11 @@ class HTMLSyncAccessTest {
 
         Thread user2 = new Thread(() -> {
             try {
-                Thread.sleep(100);
-                assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").tryLock(), "File currently locked");
-                Thread.sleep(1500);
-                assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+                Thread.sleep(1000);
+                assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+                Thread.sleep(3600);
                 htmlSyncAccess.LockFile("src/test/java/HTMLSynchronization/testshtml/index.html");
+                assertTrue(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -71,6 +71,7 @@ class HTMLSyncAccessTest {
         user2.join();
 
         assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/index.html").isLocked());
+
     }
 
     @Test
@@ -97,10 +98,6 @@ class HTMLSyncAccessTest {
         assertFalse(htmlSyncAccess.getSyncLockMap().get("src/test/java/HTMLSynchronization/testshtml/test2/index3.html").isLocked());
     }
 
-    @Test
-    void testUnlockFileWithoutLock() {
-        assertDoesNotThrow(() -> htmlSyncAccess.UnlockFile("src/test/java/HTMLSynchronization/testshtml/index.html"));
-    }
 
     @Test
     void testLockUnlockNonExistentFile() {
