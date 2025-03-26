@@ -24,6 +24,7 @@ public class LogConsumer extends Thread {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE, true))) {
                     writer.write(logEntry);
                     writer.newLine(); // Add a new line after each log entry
+                    writer.flush(); // Flush the buffer to ensure the message is written to the file
                 } catch (IOException e) {
                     System.err.println("[ERROR] Could not write to file: " + LOG_FILE);
                 }
