@@ -5,7 +5,15 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Main class to start the HTTP server.
+ */
 public class Main {
+    /**
+     * Main method that reads the server configuration from a JSON file and starts the HTTP server.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         Path currentRelativePath = Paths.get("");
         String absolutePath = currentRelativePath.toAbsolutePath().toString();
@@ -18,6 +26,7 @@ public class Main {
         // We will read a json config file
         ConfigJSONReader reader = new ConfigJSONReader(absolutePath + "config/serverConfig.json");
         ServerConfig serverConfig = new ServerConfig(reader);
+
         //Print Config
         System.out.println("Loaded Config:");
         System.out.println("Port: " + serverConfig.getPort());
@@ -30,8 +39,10 @@ public class Main {
         System.out.println("---------------------------");
 
 
+        // Start the server
         MainHTTPServerThread s = new MainHTTPServerThread(serverConfig);
         s.start();
+
         try {
             s.join();
         } catch (InterruptedException e) {
