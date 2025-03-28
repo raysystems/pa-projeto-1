@@ -28,25 +28,25 @@ public class MainHTTPServerThread extends Thread {
         this.SERVER_ROOT = cfg.getDocumentRoot();
         this.runner = new ThreadPoolRunner(5);
         this.htmlSyncAccess = new HTMLSyncAccess("html");
-
     }
 
 
     /**
      * Starts the HTTP server and listens for incoming client requests.
      * Processes HTTP GET requests and serves files from the defined server root directory.
+     *
+     * @throws IOException If an I/O error occurs while creating the server socket or accepting client connections.
      */
     @Override
     public void run() {
-        try {
-            ServerSocket server = new ServerSocket(port);
+        try (ServerSocket server = new ServerSocket(port)) {
 
-            //Create Thread to print Runner Status
+            // Create Thread to print Runner Status
             Thread status = new Thread(() -> {
                 while (true) {
-                    System.out.println("Total Free Workers: " +  String.valueOf(runner.getFreeWorkers()) +
-                                       "\nActive Workers on ThreadPool: " + runner.getActiveCount() +
-                                       "\nWaiting: " + runner.getQueueSize());
+                    System.out.println("Total Free Workers: " + runner.getFreeWorkers() +
+                            "\nActive Workers on ThreadPool: " + runner.getActiveCount() +
+                            "\nWaiting: " + runner.getQueueSize());
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -54,6 +54,8 @@ public class MainHTTPServerThread extends Thread {
                     }
                 }
             });
+
+            // Start the status thread
             status.start();
             while (true) {
                 Socket client = server.accept();
