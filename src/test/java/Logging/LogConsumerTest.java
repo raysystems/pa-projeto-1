@@ -18,14 +18,15 @@ public class LogConsumerTest {
         LogConsumer logConsumer = new LogConsumer(logQueue);
         logConsumer.start();
 
-        logQueue.put("Test log entry");
+        String testLogEntry = "{ \"timestamp\": \"2025-03-28 19:40:55\", \"method\": \"GET\", \"route\": \"/home\", \"origin\": \"127.0.0.1\", \"HTTP response status\": 200 }";
+        logQueue.put(testLogEntry);
         Thread.sleep(100); // Give some time for the log entry to be written
 
         logConsumer.interrupt();
         logConsumer.join();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("server.log"))) {
-            assertEquals("Test log entry", reader.readLine());
+            assertEquals(testLogEntry, reader.readLine());
         } catch (IOException e) {
             fail("Could not read from log file");
         } finally {
