@@ -4,8 +4,6 @@ import Utils.Configuration.ServerConfig;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * A simple HTTP server that listens on a specified port.
@@ -13,12 +11,11 @@ import java.nio.file.Paths;
  */
 public class MainHTTPServerThread extends Thread {
 
-    private String SERVER_ROOT; // Define by user
-    private ServerConfig serverConfig;
+    private final String SERVER_ROOT; // Define by user
+    private final ServerConfig serverConfig;
     private final int port;
-    private ServerSocket server;
-    private ThreadPoolRunner runner;
-    private HTMLSyncAccess htmlSyncAccess;
+    private final ThreadPoolRunner runner;
+    private final HTMLSyncAccess htmlSyncAccess;
 
     /**
      * Constructor to initialize the HTTP server thread with the specified configuration.
@@ -42,13 +39,14 @@ public class MainHTTPServerThread extends Thread {
     @Override
     public void run() {
         try {
-            server = new ServerSocket(port);
-            //System.out.println("Server started on port: " + port);
-            //System.out.println("Working Directory: " + System.getProperty("user.dir"));
+            ServerSocket server = new ServerSocket(port);
+
             //Create Thread to print Runner Status
             Thread status = new Thread(() -> {
                 while (true) {
-                    System.out.println("Total Free Workers: " +  String.valueOf(runner.getFreeWorkers()) + "\nWorkers Ativos do ThreadPool: " + runner.getActiveCount() + " \nEm espera: " + runner.getQueueSize());
+                    System.out.println("Total Free Workers: " +  String.valueOf(runner.getFreeWorkers()) +
+                                       "\nActive Workers on ThreadPool: " + runner.getActiveCount() +
+                                       "\nWaiting: " + runner.getQueueSize());
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -59,7 +57,6 @@ public class MainHTTPServerThread extends Thread {
             status.start();
             while (true) {
                 Socket client = server.accept();
-                //System.out.println("Client connected: " + client.getInetAddress().getHostAddress());
 
                 RequestHandlerThread task = new RequestHandlerThread(client, SERVER_ROOT, serverConfig, htmlSyncAccess);
                 runner.submit(task);
@@ -67,7 +64,6 @@ public class MainHTTPServerThread extends Thread {
             }
 
         } catch (IOException e) {
-            //System.err.println("Server error: Unable to start on port " + port);
             e.printStackTrace();
         }
     }
