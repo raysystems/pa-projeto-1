@@ -1,3 +1,4 @@
+import ErrorLogging.ErrorLogging;
 import Utils.ConfigReader.ConfigJSONReader;
 import Utils.Configuration.ServerConfig;
 
@@ -38,7 +39,6 @@ public class Main {
         System.out.println("Maximum Requests: " + serverConfig.getMaximumRequests());
         System.out.println("---------------------------");
 
-
         // Start the server
         MainHTTPServerThread s = new MainHTTPServerThread(serverConfig);
         s.start();
@@ -46,7 +46,12 @@ public class Main {
         try {
             s.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
+        } catch (Exception e) {
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
         }
     }
 }

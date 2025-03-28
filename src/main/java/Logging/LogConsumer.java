@@ -1,5 +1,7 @@
 package Logging;
 
+import ErrorLogging.ErrorLogging;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,7 +28,8 @@ public class LogConsumer extends Thread {
                     writer.newLine(); // Add a new line after each log entry
                     writer.flush(); // Flush the buffer to ensure the message is written to the file
                 } catch (IOException e) {
-                    System.err.println("[ERROR] Could not write to file: " + LOG_FILE);
+                    Thread thread = new Thread(() -> ErrorLogging.logError("Could not write to file: " + LOG_FILE, false));
+                    thread.start();
                 }
 
             } catch (InterruptedException e) {
