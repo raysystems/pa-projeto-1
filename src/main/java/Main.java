@@ -45,6 +45,10 @@ public class Main {
 
         try {
             s.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
         } catch (Exception e) {
             Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
             thread.start();
