@@ -35,7 +35,7 @@ public class RequestHandlerThread extends Thread {
             String route = parseHTTPRequest(br);
             String method = "GET"; // This server only supports GET requests
             String origin = client.getInetAddress().getHostAddress();
-            int statusCode = 200;
+            int statusCode;
 
 
             route = parseRouteIdentifyNeedsDefaultPage(route);
@@ -63,6 +63,8 @@ public class RequestHandlerThread extends Thread {
             // Check if the page was not found (serverDefaultPage deals with this)
             if (new String(content).contains("404")) {
                 statusCode = 404;
+            } else {
+                statusCode = 200;
             }
 
             //Simulate a delay
@@ -84,7 +86,16 @@ public class RequestHandlerThread extends Thread {
             clientOutput.flush();
 
             // Register the request in the server log
-            LogProducer.logRequest(method, route, origin, statusCode);
+            String finalRoute = route;
+            Thread thread = new Thread(() -> {
+                try {
+                    LogProducer.logRequest(method, finalRoute, origin, statusCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+
 
         } catch (IOException e) {
             System.err.println("Error handling client request.");
