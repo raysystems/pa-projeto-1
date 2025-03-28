@@ -24,7 +24,6 @@ public class ErrorLogging {
                     String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-dd-MM / HH:mm:ss"));
                     writer.write("[ERROR - " + timestamp +  " ] - " + message);
                 }
-                writer.write(message);
                 writer.newLine();
                 writer.flush();
             } catch (IOException e) {
