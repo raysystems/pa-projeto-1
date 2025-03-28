@@ -87,7 +87,13 @@ public class RequestHandlerThread extends Thread {
 
             // Register the request in the server log
             String finalRoute = route;
-            Thread thread = new Thread(() -> LogProducer.logRequest(method, finalRoute, origin, statusCode));
+            Thread thread = new Thread(() -> {
+                try {
+                    LogProducer.logRequest(method, finalRoute, origin, statusCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
             thread.start();
 
 
