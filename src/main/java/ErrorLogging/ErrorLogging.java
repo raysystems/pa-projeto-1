@@ -6,14 +6,23 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Semaphore;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+/**
+ * This class features writing error messages from exceptions in an error log file.
+ * Uses a semaphore to ensure that only one thread at a time can write in the error log file.
+ */
 public class ErrorLogging {
 
     private static final String ERROR_LOG_FILE = "error.log";
     private static final Semaphore semaphore = new Semaphore(1);
 
+    /**
+     * Writes an error message in the error log file.
+     *
+     * @param message   Error message to be written.
+     * @param OwnFormat If true, message will be written in the own format.
+     *                  Else, message will be written in a given format featuring a timestamp.
+     */
     public static void logError(String message, Boolean OwnFormat) {
         try {
             semaphore.acquire();
@@ -36,4 +45,5 @@ public class ErrorLogging {
             semaphore.release();
         }
     }
+    
 }
