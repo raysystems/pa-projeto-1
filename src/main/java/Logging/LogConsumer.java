@@ -1,20 +1,32 @@
 package Logging;
 
 import ErrorLogging.ErrorLogging;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * This class is responsible for the behaviour of consumer threads.
+ * Consumer threads write log messages in a server log file from a buffer.
+ */
 public class LogConsumer extends Thread {
+
     private final BlockingQueue<String> logQueue;
     private static final String LOG_FILE = "server.log";
 
+    /**
+     * Initializes the log message buffer.
+     *
+     * @param logQueue Buffer containing log messages to be written.
+     */
     public LogConsumer(BlockingQueue<String> logQueue) {
         this.logQueue = logQueue;
     }
 
+    /**
+     * Consumes log messages from the buffer and writes them in a server log file.
+     */
     @Override
     public void run() {
         while (true) {
@@ -37,6 +49,6 @@ public class LogConsumer extends Thread {
                 break; // Exit the loop if interrupted
             }
         }
-
     }
+
 }
