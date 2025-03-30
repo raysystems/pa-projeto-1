@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingQueue;
 public class LogConsumer extends Thread {
 
     private final BlockingQueue<String> logQueue;
-    private static final String LOG_FILE = "server.log";
+    protected static final String LOG_FILE = "server.log";
 
     /**
      * Initializes the log message buffer.
