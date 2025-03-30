@@ -86,7 +86,7 @@ class RequestHandlerThreadTest {
         String result = requestHandlerThread.parseHTTPRequest(br);
         assertEquals("/index.html", result);
     }
-    
+
 
 
 }
