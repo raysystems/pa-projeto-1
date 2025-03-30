@@ -1,5 +1,7 @@
 package Logging;
 
+import ErrorLogging.ErrorLogging;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.BlockingQueue;
@@ -39,7 +41,8 @@ public class LogProducer {
             logQueue.put(logEntry); // Block if the queue is full
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore interrupted status
-            System.err.println("[ERROR] LogProducer interrupted while putting log entry in queue.");
+            Thread thread = new Thread(() -> ErrorLogging.logError("[ERROR] LogProducer interrupted while putting log entry in queue", false));
+            thread.start();
         }
     }
 

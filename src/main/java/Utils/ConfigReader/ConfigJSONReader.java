@@ -1,5 +1,6 @@
 package Utils.ConfigReader;
 
+import ErrorLogging.ErrorLogging;
 import Utils.ConfigReader.Interfaces.IConfigReader;
 import Utils.Configuration.ServerConfig;
 
@@ -35,7 +36,8 @@ public class ConfigJSONReader implements IConfigReader {
             configMap.put("page404", root.get("page404").asText());
             configMap.put("maximumRequests", root.get("maximumRequests").asInt());
         } catch (IOException e) {
-            System.err.println("Error reading server configuration file: " + cfgPath);
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
             e.printStackTrace();
         }
 

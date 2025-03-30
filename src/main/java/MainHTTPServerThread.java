@@ -1,3 +1,4 @@
+import ErrorLogging.ErrorLogging;
 import HTMLSynchronization.HTMLSyncAccess;
 import Utils.Configuration.ServerConfig;
 
@@ -64,6 +65,8 @@ public class MainHTTPServerThread extends Thread {
             }
 
         } catch (IOException e) {
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
             e.printStackTrace();
         }
     }

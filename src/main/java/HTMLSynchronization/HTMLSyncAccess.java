@@ -1,5 +1,7 @@
 package HTMLSynchronization;
 
+import ErrorLogging.ErrorLogging;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -52,6 +54,8 @@ public class HTMLSyncAccess {
                         AddValuesToMap(filePath, new ReentrantLock(true));
                     });
         } catch (IOException e) {
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
             e.printStackTrace();
         }
     }
@@ -71,6 +75,8 @@ public class HTMLSyncAccess {
                 e.printStackTrace();
             }
         } else {
+            Thread thread = new Thread(() -> ErrorLogging.logError("No lock for this path: " + filePath, false));
+            thread.start();
             throw new IllegalArgumentException("No lock for this path: " + filePath);
         }
     }
@@ -87,6 +93,8 @@ public class HTMLSyncAccess {
             try {
                 lockFile.unlock();
             } catch (Exception e) {
+                Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+                thread.start();
                 e.printStackTrace();
             }
         } else {
