@@ -24,12 +24,14 @@ public class ThreadPoolRunner {
     public void submit(Runnable task) {
         threadPool.submit(task);
     }
-
     /**
-     * Returns the number of available threads in the thread pool.
+     * Shuts down the thread pool.
      *
-     * @return Number of available threads.
      */
+    public void shutdown() {
+        threadPool.shutdown();
+    }
+
     public int getFreeWorkers() {
         return threadPool.getMaximumPoolSize() - threadPool.getActiveCount();
     }
