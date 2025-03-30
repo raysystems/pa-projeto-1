@@ -8,8 +8,8 @@
 
 ## 📌 Project Documentation
 
-- **[Java Documentation](https://docs-pa.ray-systems.pt/)**: Documentação completa do projeto.
-- **[Coverage Report](https://coverage-pa.ray-systems.pt/)**: Relatório de cobertura de testes.
+- <a href="https://docs-pa.ray-systems.pt/" target="_blank">**Java Documentation**</a>: Documentação completa do projeto.
+- <a href="https://coverage-pa.ray-systems.pt/" target="_blank">**Coverage Report**</a>: Relatório de cobertura de testes.
 
 
 ## 📌 Project Overview
