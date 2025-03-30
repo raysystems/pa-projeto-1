@@ -33,9 +33,9 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add -f projectreports/apidocs
           git commit -m 'ci: Update Documentation report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
+          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
 
       - name: Move coverage report to projectreports
         run: |
@@ -48,6 +48,6 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add -f projectreports/jacoco
           git commit -m 'ci: Update coverage report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
+          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
