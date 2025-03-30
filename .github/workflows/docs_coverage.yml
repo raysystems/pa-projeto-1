@@ -27,15 +27,23 @@ jobs:
           mkdir -p projectreports/apidocs
           mv target/apidocs/* projectreports/apidocs/
 
-      - name: Upload documentation to FTP1
-        run: |
-          curl -T projectreports/apidocs/* ftp://ray-systems.pt --user documentationpa@docs-pa.ray-systems.pt:${{ secrets.FTP_DOC_USER_PASSWORD }}
+      - name: Upload documentation to documentation subdomain
+        uses: GenieTim/ftp-action@v4.0.1
+        with:
+          host: ray-systems.pt
+          user: ${{ secrets.FTP_DOC_USER }}
+          password: ${{ secrets.FTP_DOC_USER_PASSWORD }}
+          localDir: projectreports/apidocs
 
       - name: Move coverage report to projectreports
         run: |
           mkdir -p projectreports/jacoco
           mv target/site/jacoco/* projectreports/jacoco/
 
-      - name: Upload coverage report to FTP2
-        run: |
-          curl -T projectreports/jacoco/* ftp://ray-systems.pt --user coveragereports@coverage-pa.ray-systems.pt:${{ secrets.FTP_COV_USER_PASSWORD }}
+      - name: Upload coverage report to coverage subdomain
+        uses: GenieTim/ftp-action@v4.0.1
+        with:
+          host: ray-systems.pt
+          user: ${{ secrets.FTP_COV_USER }}
+          password: ${{ secrets.FTP_COV_USER_PASSWORD }}
+          localDir: projectreports/jacoco
