@@ -6,6 +6,12 @@
 👨‍💻 Sérgio Olim - 2120322    || GitUsername: SACO5<br>
 👨‍💻 Jorge Jesus - 2120022    || GitUsername: jorgejesus03<br>
 
+## 📌 Project Documentation
+
+- **[Java Documentation](https://docs-pa.ray-systems.pt/)**: Documentação completa do projeto.
+- **[Coverage Report](https://coverage-pa.ray-systems.pt/)**: Relatório de cobertura de testes.
+
+
 ## 📌 Project Overview
 This project implements a parallel web server in Java as part of the "Advanced Programming" course. The server is capable of handling multiple simultaneous requests while ensuring controlled access to shared resources through proper synchronization mechanisms.
 
