@@ -92,7 +92,7 @@ public class RequestHandlerThread extends Thread {
         }
     }
 
-    private String parseRouteIdentifyNeedsDefaultPage(String route) {
+    public String parseRouteIdentifyNeedsDefaultPage(String route) {
         // if the route does not contain .html, append the default page
         if (!route.contains(".html") && !route.contains(".css") && !route.contains(".js") && !route.contains(".ico") &&
                 !route.contains(".png") && !route.contains(".jpg") && !route.contains(".jpeg") && !route.contains(".gif") &&
@@ -123,7 +123,7 @@ public class RequestHandlerThread extends Thread {
      * @return A byte array containing the contents of the requested file or the 404 error page.
      * @throws IOException If an I/O error occurs while reading the file.
      */
-    private byte[] readDocument(String route, ServerConfig serverConfig, String SERVER_ROOT) throws IOException {
+    public byte[] readDocument(String route, ServerConfig serverConfig, String SERVER_ROOT) throws IOException {
 
         byte[] content;
         try {
@@ -144,7 +144,7 @@ public class RequestHandlerThread extends Thread {
      * @return The requested route, or null if the request is invalid.
      * @throws IOException If an I/O error occurs while reading the request.
      */
-    private String parseHTTPRequest(BufferedReader br) throws IOException {
+    public String parseHTTPRequest(BufferedReader br) throws IOException {
         StringBuilder requestBuilder = new StringBuilder();
 
         String line;
@@ -170,7 +170,7 @@ public class RequestHandlerThread extends Thread {
      * @param path The file path to read.
      * @return A byte array containing the file's contents, or an empty array if an error occurs.
      */
-    private byte[] readBinaryFile(String path) throws IOException {
+    public byte[] readBinaryFile(String path) throws IOException {
 
         return Files.readAllBytes(Paths.get(path));
 

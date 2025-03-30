@@ -15,8 +15,6 @@ public class ThreadPoolRunner {
         threadPool.shutdown();
     }
 
-
-
     public int getFreeWorkers() {
         return threadPool.getMaximumPoolSize() - threadPool.getActiveCount();
     }
