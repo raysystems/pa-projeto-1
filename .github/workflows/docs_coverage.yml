@@ -33,7 +33,7 @@ jobs:
           server: ray-systems.pt
           username: documentationpa@docs-pa.ray-systems.pt
           password: ${{ secrets.FTP_DOC_USER_PASSWORD }}
-          local-dir: projectreports/apidocs
+          local-dir: projectreports/apidocs/
 
       - name: Move coverage report to projectreports
         run: |
@@ -46,4 +46,4 @@ jobs:
           server: ray-systems.pt
           username: coveragereports@coverage-pa.ray-systems.pt
           password: ${{ secrets.FTP_COV_USER_PASSWORD }}
-          local-dir: projectreports/jacoco
+          local-dir: projectreports/jacoco/
