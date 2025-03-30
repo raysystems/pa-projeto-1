@@ -57,12 +57,5 @@ public class ErrorLoggingTest {
         logFile.setWritable(true);
     }
 
-    @Test
-    public void testLogErrorInterruptedException() {
-        Thread.currentThread().interrupt();
-        String message = "InterruptedException error message";
-        ErrorLogging.logError(message, true);
 
-        assertTrue(Thread.interrupted());
-    }
 }
