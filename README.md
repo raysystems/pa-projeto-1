@@ -2,9 +2,9 @@
 **Project 1 - Advanced Programming**
 
 **👥 Group 7:**<br>
-👨‍💻 Marco Ferreira - 2119022 || GitUsername: raysystems<br>
-👨‍💻 Sérgio Olim - 2120322    || GitUsername: SACO5<br>
-👨‍💻 Jorge Jesus - 2120022    || GitUsername: jorgejesus03<br>
+👨‍💻 Marco Ferreira - 2119022 ([raysystems](https://github.com/raysystems))
+👨‍💻 Sérgio Olim - 2120322 ([SACO5](https://github.com/SACO5))
+👨‍💻 Jorge Jesus - 2120022 ([jorgejesus03](https://github.com/jorgejesus03))
 
 ## 📌 Project Documentation
 
@@ -24,24 +24,28 @@ This project implements a parallel web server in Java as part of the "Advanced P
     - The number of concurrent requests is configurable via `serverConfig.json`.
 - **Producer-Consumer Pattern**:
     - Asynchronous logging system using a producer-consumer approach to write requests to the `server.log` file.
+- **Synchronization using semaphore **:
+    - Synchronous error logging system implementing a semaphore to prevent race condiitons when writing error messages to the `error.log` file.
 
 ### 🚀 Extra Features
-- **Caching System (LRU Cache)**: 
-    - Implemented to improve performance by reducing disk I/O for frequently accessed HTML files.
-    - Cache size is configurable via the `server.config` file.
+- **Continuous delivery**: 
+    - Developed a workflow that compiles de project documentation and coverage reports.
+    - Sends the compiled data to a web server via FTP simulating a continuous delivery to the client.
+    - Can be found in the project documentation tab.
 
 ## 📂 Project Structure
 ```
 ├── src
 │   ├── main
 │   │     ├── java
+|   |     |      ├── ErrorLogging (Logs errors caught in execution)
 │   │     │      ├── HTMLSychronization (Makes synchronized access to each .html file)
-│   │     │      ├── cache (LRU Cache Implementation)
 │   │     │      ├── Logging (Related to utility classes to log things)
 │   │     │      └── Utils (Utility classes)
-│   │            
-└── README.md
+│   │     |
+|   ├── test (Contains all unit test for each feature)     
 └── server.log (Contains server requets logs)
+└── error.log (Contains error logs)
 ```
 
 
@@ -70,9 +74,3 @@ Requests are logged asynchronously without blocking requests to `server.log` in 
   "response": 200
 }
 ```
-
-## 📜 Authors
-- 👨‍💻 Marco Ferreira - 2119022 ([raysystems](https://github.com/raysystems))
-- 👨‍💻 Sérgio Olim - 2120322 ([SACO5](https://github.com/SACO5))
-- 👨‍💻 Jorge Jesus - 2120022 ([jorgejesus03](https://github.com/jorgejesus03))
-
