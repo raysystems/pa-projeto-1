@@ -31,7 +31,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ray-systems.pt
-          username: ${{ secrets.FTP_DOC_USER }}
+          username: documentationpa@docs-pa.ray-systems.pt
           password: ${{ secrets.FTP_DOC_USER_PASSWORD }}
           local-dir: projectreports/apidocs
 
@@ -44,6 +44,6 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ray-systems.pt
-          username: ${{ secrets.FTP_COV_USER }}
+          username: coveragereports@coverage-pa.ray-systems.pt
           password: ${{ secrets.FTP_COV_USER_PASSWORD }}
           local-dir: projectreports/jacoco
