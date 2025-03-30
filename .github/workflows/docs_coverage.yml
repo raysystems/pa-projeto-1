@@ -28,12 +28,12 @@ jobs:
           mv target/apidocs/* projectreports/apidocs/
 
       - name: Upload documentation to documentation subdomain
-        uses: GenieTim/ftp-action@v4.0.1
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ray-systems.pt
-          user: ${{ secrets.FTP_DOC_USER }}
+          server: ray-systems.pt
+          username: ${{ secrets.FTP_DOC_USER }}
           password: ${{ secrets.FTP_DOC_USER_PASSWORD }}
-          localDir: projectreports/apidocs
+          local-dir: projectreports/apidocs
 
       - name: Move coverage report to projectreports
         run: |
@@ -41,9 +41,9 @@ jobs:
           mv target/site/jacoco/* projectreports/jacoco/
 
       - name: Upload coverage report to coverage subdomain
-        uses: GenieTim/ftp-action@v4.0.1
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ray-systems.pt
-          user: ${{ secrets.FTP_COV_USER }}
+          server: ray-systems.pt
+          username: ${{ secrets.FTP_COV_USER }}
           password: ${{ secrets.FTP_COV_USER_PASSWORD }}
-          localDir: projectreports/jacoco
+          local-dir: projectreports/jacoco
