@@ -27,27 +27,15 @@ jobs:
           mkdir -p projectreports/apidocs
           mv target/apidocs/* projectreports/apidocs/
 
-      - name: Commit and push documentation
+      - name: Upload documentation to FTP1
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add -f projectreports/apidocs
-          git commit -m 'ci: Update Documentation report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
+          curl -T projectreports/apidocs/* ftp://ray-systems.pt --user documentationpa@docs-pa.ray-systems.pt:${{ secrets.FTP_DOC_USER_PASSWORD }}
 
       - name: Move coverage report to projectreports
         run: |
           mkdir -p projectreports/jacoco
           mv target/site/jacoco/* projectreports/jacoco/
 
-      - name: Commit and push coverage report
+      - name: Upload coverage report to FTP2
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add -f projectreports/jacoco
-          git commit -m 'ci: Update coverage report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
+          curl -T projectreports/jacoco/* ftp://ray-systems.pt --user coveragereports@coverage-pa.ray-systems.pt:${{ secrets.FTP_COV_USER_PASSWORD }}
