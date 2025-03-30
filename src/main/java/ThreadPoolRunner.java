@@ -24,7 +24,10 @@ public class ThreadPoolRunner {
     public void submit(Runnable task) {
         threadPool.submit(task);
     }
-
+    /**
+     * Shuts down the thread pool.
+     *
+     */
     public void shutdown() {
         threadPool.shutdown();
     }

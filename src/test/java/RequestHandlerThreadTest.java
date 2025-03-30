@@ -3,7 +3,7 @@ import Utils.ConfigReader.ConfigJSONReader;
 import Utils.Configuration.ServerConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
 
 
 class RequestHandlerThreadTest {
