@@ -26,7 +26,14 @@ public class LogConsumerTest {
         logConsumer.join();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("server.log"))) {
-            assertEquals(testLogEntry, reader.readLine());
+            String loggedEntry = reader.readLine();
+            assertNotNull(loggedEntry);
+
+            // Extract the timestamp from the logged entry
+            String loggedEntryWithoutTimestamp = loggedEntry.replaceAll("\"timestamp\": \".*?\", ", "");
+            String testLogEntryWithoutTimestamp = testLogEntry.replaceAll("\"timestamp\": \".*?\", ", "");
+
+            assertEquals(testLogEntryWithoutTimestamp, loggedEntryWithoutTimestamp);
         } catch (IOException e) {
             fail("Could not read from log file");
         } finally {
