@@ -2,8 +2,8 @@
 **Project 1 - Advanced Programming**
 
 **👥 Group 7:**<br>
-👨‍💻 Marco Ferreira - 2119022 ([raysystems](https://github.com/raysystems))
-👨‍💻 Sérgio Olim - 2120322 ([SACO5](https://github.com/SACO5))
+👨‍💻 Marco Ferreira - 2119022 ([raysystems](https://github.com/raysystems))<br>
+👨‍💻 Sérgio Olim - 2120322 ([SACO5](https://github.com/SACO5))<br>
 👨‍💻 Jorge Jesus - 2120022 ([jorgejesus03](https://github.com/jorgejesus03))
 
 ## 📌 Project Documentation
@@ -25,7 +25,7 @@ This project implements a parallel web server in Java as part of the "Advanced P
 - **Producer-Consumer Pattern**:
     - Asynchronous logging system using a producer-consumer approach to write requests to the `server.log` file.
 - **Synchronization using semaphore **:
-    - Synchronous error logging system implementing a semaphore to prevent race condiitons when writing error messages to the `error.log` file.
+    - Synchronous error logging system implementing a semaphore to prevent race conditions when writing error messages to the `error.log` file.
 
 ### 🚀 Extra Features
 - **Continuous delivery**: 
