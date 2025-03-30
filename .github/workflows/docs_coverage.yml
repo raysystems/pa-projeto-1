@@ -26,7 +26,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add projectreports/apidocs
+          git add -f target/apidocs
           git commit -m 'ci: Update Documentation report [AUTOMATIC CI]'
           git push origin HEAD:main
         env:
@@ -36,7 +36,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add projectreports/site/jacoco
+          git add -f target/site/jacoco
           git commit -m 'ci: Update coverage report [AUTOMATIC CI]'
           git push origin HEAD:main
         env:
