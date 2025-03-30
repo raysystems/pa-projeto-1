@@ -46,6 +46,8 @@ public class LogConsumer extends Thread {
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restore interrupted status
+                Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+                thread.start();
                 break; // Exit the loop if interrupted
             }
         }

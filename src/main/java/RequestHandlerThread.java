@@ -1,3 +1,4 @@
+import ErrorLogging.ErrorLogging;
 import HTMLSynchronization.HTMLSyncAccess;
 import Logging.LogProducer;
 import Utils.Configuration.ServerConfig;
@@ -142,6 +143,8 @@ public class RequestHandlerThread extends Thread {
             content = readBinaryFile(SERVER_ROOT + route);
 
         } catch (IOException e) {
+            Thread thread = new Thread(() -> ErrorLogging.logError(e.getMessage(), false));
+            thread.start();
             throw new IOException(e.getMessage());
         }
 
