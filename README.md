@@ -24,7 +24,7 @@ This project implements a parallel web server in Java as part of the "Advanced P
     - The number of concurrent requests is configurable via `serverConfig.json`.
 - **Producer-Consumer Pattern**:
     - Asynchronous logging system using a producer-consumer approach to write requests to the `server.log` file.
-- **Synchronization using semaphore **:
+- **Synchronization using semaphore**:
     - Synchronous error logging system implementing a semaphore to prevent race conditions when writing error messages to the `error.log` file.
 
 ### 🚀 Extra Features
