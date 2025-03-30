@@ -54,17 +54,33 @@ class ThreadPoolRunnerTest {
 
     @Test
     public void testGetQueueSize() {
-        assertEquals("0", threadPoolRunner.getQueueSize());
-        Runnable task = () -> System.out.println("Task executed");
-        threadPoolRunner.submit(task);
-        assertEquals("0", threadPoolRunner.getQueueSize());
+        for (int i = 0; i < 10; i++) {
+            Runnable task = () -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            };
+            threadPoolRunner.submit(task);
+        }
+
+
+
+        assertTrue(threadPoolRunner.getQueueSize().equals("5"));
     }
 
     @Test
     public void testGetActiveCount() {
         assertEquals("0", threadPoolRunner.getActiveCount());
-        Runnable task = () -> System.out.println("Task executed");
+        Runnable task = () -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        };
         threadPoolRunner.submit(task);
-        assertEquals("1", threadPoolRunner.getActiveCount());
+        assertTrue(threadPoolRunner.getActiveCount().equals("1"));
     }
 }
