@@ -12,20 +12,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'oracle'
-          java-version: '23'
+          java-version: '17'
+
       - name: Build the app with MAVEN
         run: mvn package
-      - name: Upload a Documentation Artifact
-        uses: actions/upload-artifact@v4.6.1
+
+      - name: Move documentation to projectreports
+        run: |
+          mkdir -p projectreports/apidocs
+          mv target/apidocs/* projectreports/apidocs/
+
+      - name: Upload documentation to documentation subdomain
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          name: documentation-artifact
-          path: target/apidocs
-      - name: Upload a coverage Artifact
-        uses: actions/upload-artifact@v4.6.1
+          server: ray-systems.pt
+          username: documentationpa@docs-pa.ray-systems.pt
+          password: ${{ secrets.FTP_DOC_USER_PASSWORD }}
+          local-dir: projectreports/apidocs/
+
+      - name: Move coverage report to projectreports
+        run: |
+          mkdir -p projectreports/jacoco
+          mv target/site/jacoco/* projectreports/jacoco/
+
+      - name: Upload coverage report to coverage subdomain
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          name: coverage-artifact
-          path: target/site/jacoco
+          server: ray-systems.pt
+          username: coveragereports@coverage-pa.ray-systems.pt
+          password: ${{ secrets.FTP_COV_USER_PASSWORD }}
+          local-dir: projectreports/jacoco/
