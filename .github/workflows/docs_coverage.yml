@@ -22,22 +22,32 @@ jobs:
       - name: Build the app with MAVEN
         run: mvn package
 
+      - name: Move documentation to projectreports
+        run: |
+          mkdir -p projectreports/apidocs
+          mv target/apidocs/* projectreports/apidocs/
+
       - name: Commit and push documentation
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add -f target/apidocs
+          git add -f projectreports/apidocs
           git commit -m 'ci: Update Documentation report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
+          git push https://raysystems:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Move coverage report to projectreports
+        run: |
+          mkdir -p projectreports/jacoco
+          mv target/site/jacoco/* projectreports/jacoco/
 
       - name: Commit and push coverage report
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add -f target/site/jacoco
+          git add -f projectreports/jacoco
           git commit -m 'ci: Update coverage report [AUTOMATIC CI]'
-          git push https://raysystems:${{ secrets.ACC_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
+          git push https://raysystems:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/raysystems/pa-projeto-1.git HEAD:main
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
