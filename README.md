@@ -1,10 +1,9 @@
 # pa-projeto-1
 **Project 1 - Advanced Programming**
 
-**👥 Group 7:**<br>
-👨‍💻 Marco Ferreira - 2119022 ([raysystems](https://github.com/raysystems))<br>
-👨‍💻 Sérgio Olim - 2120322 ([SACO5](https://github.com/SACO5))<br>
-👨‍💻 Jorge Jesus - 2120022 ([jorgejesus03](https://github.com/jorgejesus03))
+## 📌 Avaluation
+
+20 out of 20.
 
 ## 📌 Project Documentation
 
