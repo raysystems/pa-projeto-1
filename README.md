@@ -1,7 +1,7 @@
 # pa-projeto-1
 **Project 1 - Advanced Programming**
 
-## 📌 Avaluation
+## 📌 Evaluation
 
 20 out of 20.
 
